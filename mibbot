@@ -5,18 +5,20 @@ if (( $# != 2 )); then
     exit 1
 fi
 
-cd "$1" || exit 2
+# Stop if any commands throw errors
+set -e
 
+cd "$1" || exit 2
 while [ 1 ] do
     # Check if there are new commits
-    git remote update
+    git fetch
     BEHIND=`git status -bs | grep -o "behind"`
-    # If so, fetch them and try to merge
+    # If so, merge, process, and commit
     if [ $BEHIND = "behind" ]; then
-        git fetch origin $2 && git merge --no-commit 
+        git merge --ff-only && \
+            ./process-changed-files && \
+            git commit -m "Make project cooler" && \
+            git push origin $2
     fi
-    # Commit changes
-    git commit -m "Make project cooler"
-    # Push
-    git push origin $2
+    sleep 5
 done
