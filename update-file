@@ -1,6 +1,6 @@
 #!/bin/sh
 
-MIBBOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-$MIBBOT_DIR/increment_numbers "$1" > "$1.better"
+COOLNESS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+$COOLNESS_DIR/increment_numbers "$1" > "$1.better"
 mv "$1.better" "$1"
 git add "$1"

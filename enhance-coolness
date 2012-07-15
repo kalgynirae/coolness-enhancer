@@ -3,12 +3,12 @@
 # Stop if any commands throw errors
 set -e
 
-if (( $# != 1 )); then
-    echo "USAGE: mibbot BRANCH_NAME SLEEP_SECONDS"
+if [ "$#" -lt "1" ]; then
+    echo "USAGE: enhance_coolness BRANCH_NAME SLEEP_SECONDS"
     exit 1
 fi
 
-MIBBOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+COOLNESS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BRANCH_NAME=$1
 SLEEP_SECONDS=${2:-1}
 
@@ -22,7 +22,7 @@ while [ 1 ]; do
         echo yup!
         echo ▶▶▶ Making project cooler...
         git merge --ff-only origin/$BRANCH_NAME && \
-            $MIBBOT_DIR/process-changed-files && \
+            $COOLNESS_DIR/process-changed-files && \
             git commit -m "Make project cooler" && \
             git push origin $BRANCH_NAME
     fi
