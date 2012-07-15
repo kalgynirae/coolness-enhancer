@@ -1,24 +1,31 @@
 #!/bin/sh
 
-if (( $# != 2 )); then
-    echo "USAGE: mibbot REPOSITORY_PATH BRANCH_NAME"
-    exit 1
-fi
-
 # Stop if any commands throw errors
 set -e
 
-cd "$1" || exit 2
-while [ 1 ] do
+if (( $# != 2 )); then
+    echo "USAGE: mibbot BRANCH_NAME SLEEP_SECONDS"
+    exit 1
+fi
+
+MIBBOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BRANCH_NAME=$1
+SLEEP_SECONDS=${2:-1}
+
+while [ 1 ]; do
     # Check if there are new commits
+    echo -n ▶▶▶ Checking for new commits...
     git fetch
-    BEHIND=`git status -bs | grep -o "behind"`
+    BEHIND=`git status -bs | grep -o "behind"` || echo "nope"
     # If so, merge, process, and commit
-    if [ $BEHIND = "behind" ]; then
-        git merge --ff-only && \
-            ./process-changed-files && \
+    if [ "$BEHIND" = "behind" ]; then
+        echo yup!
+        echo ▶▶▶ Making project cooler...
+        git merge --ff-only origin/$BRANCH_NAME && \
+            $MIBBOT_DIR/process-changed-files && \
             git commit -m "Make project cooler" && \
-            git push origin $2
+            git push origin $BRANCH_NAME
     fi
-    sleep 5
+    echo ▶▶▶ Sleeping for $SLEEP_SECONDS seconds
+    sleep $SLEEP_SECONDS
 done

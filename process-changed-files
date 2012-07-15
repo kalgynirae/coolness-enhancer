@@ -1,3 +1,4 @@
 #!/bin/sh
 
-git diff --name-only -z HEAD HEAD~1 | xargs -0 -n 1 ./update-file
+MIBBOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+git diff --name-only -z HEAD HEAD~1 | xargs -0 -n 1 $MIBBOT_DIR/update-file
