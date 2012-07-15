@@ -1,0 +1,14 @@
+coolness-enhancer
+=================
+
+coolness-enhancer helps your project stay as cool as possible by
+keeping your numbers as up-to-date as possible.
+
+How to use
+----------
+
+1.  Open a terminal and switch to the directory of a git repository.
+2.  Make sure you are on the branch you want to watch for changes.
+3.  Execute `enhance-coolness`.
+4.  Observe as the coolness is automatically enhanced whenever a new
+    commit becomes available.

@@ -3,21 +3,25 @@
 # Stop if any commands throw errors
 set -e
 
-if [ "$#" -lt "1" ]; then
-    echo "USAGE: enhance_coolness BRANCH_NAME SLEEP_SECONDS"
+SLEEP_SECONDS=${1:-5}
+if ! [[ "$SLEEP_SECONDS" =~ ^[0-9]+$ ]]; then
+    echo "USAGE: enhance_coolness [SLEEP_SECONDS]"
     exit 1
 fi
 
+BRANCH_NAME=$(git symbolic-ref -q HEAD)
+BRANCH_NAME=${BRANCH_NAME##refs/heads/}
+if [ -z "$BRANCH_NAME" ]; then
+    echo "Could not determine the current branch"
+    exit 2
+fi
+
 COOLNESS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BRANCH_NAME=$1
-SLEEP_SECONDS=${2:-1}
 
 while [ 1 ]; do
-    # Check if there are new commits
     echo -n ▶▶▶ Checking for new commits...
     git fetch
     BEHIND=`git status -bs | grep -o "behind"` || echo "nope"
-    # If so, merge, process, and commit
     if [ "$BEHIND" = "behind" ]; then
         echo yup!
         echo ▶▶▶ Making project cooler...
@@ -26,6 +30,8 @@ while [ 1 ]; do
             git commit -m "Make project cooler" && \
             git push origin $BRANCH_NAME
     fi
-    echo ▶▶▶ Sleeping for $SLEEP_SECONDS seconds
-    sleep $SLEEP_SECONDS
+    if [ "$SLEEP_SECONDS" -ge "1" ]; then
+        echo ▶▶▶ Sleeping for $SLEEP_SECONDS seconds
+        sleep $SLEEP_SECONDS
+    fi
 done
