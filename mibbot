@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if (( $# != 2 )); then
+    echo "USAGE: mibbot REPOSITORY_PATH BRANCH_NAME"
+    exit 1
+fi
+
+cd "$1" || exit 2
+
+while [ 1 ] do
+    # Check if there are new commits
+    git remote update
+    BEHIND=`git status -bs | grep -o "behind"`
+    # If so, fetch them and try to merge
+    if [ $BEHIND = "behind" ]; then
+        git fetch origin $2 && git merge --no-commit 
+    fi
+    # Commit changes
+    git commit -m "Make project cooler"
+    # Push
+    git push origin $2
+done
