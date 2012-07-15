@@ -3,7 +3,7 @@
 # Stop if any commands throw errors
 set -e
 
-if (( $# != 2 )); then
+if (( $# != 1 )); then
     echo "USAGE: mibbot BRANCH_NAME SLEEP_SECONDS"
     exit 1
 fi
