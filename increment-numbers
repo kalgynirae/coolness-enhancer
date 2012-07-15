@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""USAGE: python increment_numbers.py FILENAME"""
+"""USAGE: increment-numbers FILENAME"""
 import re
 import sys
 
