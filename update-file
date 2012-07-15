@@ -1,0 +1,4 @@
+#!/bin/sh
+
+python3 increment_numbers.py "$1" > "$1.better"
+mv "$1.better" "$1"
